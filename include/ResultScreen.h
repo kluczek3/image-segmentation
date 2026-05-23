@@ -1,32 +1,31 @@
-#ifndef RESULTSCREEN_H
-#define RESULTSCREEN_H
-
+#pragma once
 #include <QWidget>
-#include <QString>
-#include <QImage>
+#include <QTimer>
+#include <QElapsedTimer>
 
-namespace Ui {
-    class ResultScreen;
-}
+namespace Ui { class ResultScreen; }
 
 class ResultScreen : public QWidget {
     Q_OBJECT
-
 public:
     explicit ResultScreen(QWidget* parent = nullptr);
     ~ResultScreen();
-
-    void setResults(const QImage& cpuImage, const QImage& gpuImage,
-        double cpuTimeMs, double gpuTimeMs, const QString& algoName);
+    void prepareProcessing(const QString& algoName);
+    void showResults(const QImage& resultImage, double executionTime);
+    void cleanScreen();
 
 signals:
     void backRequested();
 
 private slots:
     void on_backButton_clicked();
+    void updateLiveTimer();
+    void updateSpinner();
 
 private:
     Ui::ResultScreen* ui;
+    QTimer* liveTimer;
+    QTimer* spinnerTimer;
+    QElapsedTimer elapsedTimer;
+    int spinnerAngle;
 };
-
-#endif

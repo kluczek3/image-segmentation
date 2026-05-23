@@ -1,22 +1,17 @@
-#ifndef STARTSCREEN_H
-#define STARTSCREEN_H
-
+#pragma once
 #include <QWidget>
-#include <QStringList>
+#include <vector>
 
-namespace Ui {
-    class StartScreen;
-}
+namespace Ui { class StartScreen; }
 
 class StartScreen : public QWidget {
     Q_OBJECT
-
 public:
     explicit StartScreen(QWidget* parent = nullptr);
     ~StartScreen();
 
 signals:
-    void segmentRequested();
+    void segmentRequested(int algorithmIndex, const QString& algorithmName);
 
 private slots:
     void on_segmentButton_clicked();
@@ -25,12 +20,8 @@ private slots:
 
 private:
     Ui::StartScreen* ui;
-
-    QStringList algorithms;
+    std::vector<QString> algorithms;
     int currentIndex;
     bool isAnimating;
-
     void switchAlgorithm(int direction);
 };
-
-#endif

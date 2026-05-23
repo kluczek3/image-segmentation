@@ -1,5 +1,5 @@
 #include "StartScreen.h"
-#include "ui/ui_StartScreen.h"
+#include "ui_StartScreen.h"
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QGraphicsOpacityEffect>
@@ -12,7 +12,6 @@ StartScreen::StartScreen(QWidget* parent) :
     isAnimating(false) {
 
     ui->setupUi(this);
-
     algorithms = { "K-Means", "Fuzzy C-Means", "Otsu Thresholding", "Mean Shift" };
     ui->currentAlgoLabel->setText(algorithms[currentIndex]);
 
@@ -26,7 +25,7 @@ StartScreen::~StartScreen() {
 }
 
 void StartScreen::on_segmentButton_clicked() {
-    emit segmentRequested();
+    emit segmentRequested(currentIndex, algorithms[currentIndex]);
 }
 
 void StartScreen::on_prevAlgoButton_clicked() {
