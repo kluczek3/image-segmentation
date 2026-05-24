@@ -1,6 +1,6 @@
 ﻿# Image Segmentation with CUDA
 
-ImageSegmentationCUDA is a C++ application for benchmarking image segmentation algorithms on CPU and GPU (CUDA).  
+image-segmentation is a C++ application for benchmarking image segmentation algorithms on CPU and GPU (CUDA).  
 The project uses Qt for the graphical interface, CUDA for GPU acceleration, and OpenCV for image processing.
 
 ## Requirements
@@ -40,7 +40,7 @@ After installation, configure the `CMAKE_PREFIX_PATH` environment variable so CM
 Example:
 
 ```bash
-CMAKE_PREFIX_PATH=C:/Qt/6.6.2/msvc2022_64
+$env:CMAKE_PREFIX_PATH=C:/Qt/6.6.2/msvc2022_64
 ```
 
 ## Cloning the Repository
@@ -49,8 +49,8 @@ The project uses `vcpkg` as a Git submodule for dependency management.
 Clone the repository recursively:
 
 ```bash
-git clone --recursive https://github.com/kluczek3/CUDASegmentation.git
-cd CUDASegmentation
+git clone --recursive https://github.com/kluczek3/image-segmentation.git
+cd image-segmentation
 ```
 
 If the repository was already cloned without submodules initialized, run:
@@ -85,12 +85,6 @@ The generated executable will be located in:
 
 ```bash
 out/build/x64-<configuration>/
-```
-
-Example:
-
-```bash
-out/build/x64-Debug/
 ```
 
 ## Notes
