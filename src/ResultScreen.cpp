@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QPen>
 
-ResultScreen::ResultScreen(QWidget* parent) : QWidget(parent), ui(new Ui::ResultScreen), spinnerAngle(0) {
+ResultScreen::ResultScreen(QWidget* parent) : QWidget(parent), ui(new Ui::ResultScreen), spinnerAngle(0), cpuDone(false), gpuDone(false) {
     ui->setupUi(this);
     liveTimer = new QTimer(this);
     spinnerTimer = new QTimer(this);
@@ -13,29 +13,40 @@ ResultScreen::ResultScreen(QWidget* parent) : QWidget(parent), ui(new Ui::Result
     connect(ui->backButton, &QPushButton::clicked, this, &ResultScreen::on_backButton_clicked);
 }
 
-ResultScreen::~ResultScreen() {
-    delete ui;
-}
+ResultScreen::~ResultScreen() { delete ui; }
 
 void ResultScreen::prepareProcessing(const QString& algoName) {
     cleanScreen();
     ui->algoNameLabel->setText(algoName);
     ui->backButton->setEnabled(false);
+    cpuDone = false;
+    gpuDone = false;
 
     elapsedTimer.start();
     liveTimer->start(10);
     spinnerTimer->start(30);
 }
 
-void ResultScreen::showResults(const QImage& cpuImage, double cpuTime, const QImage& gpuImage, double gpuTime) {
-    liveTimer->stop();
-    spinnerTimer->stop();
+void ResultScreen::showCpuResult(const QImage& image, double time) {
+    cpuDone = true;
+    ui->cpuImageLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->cpuImageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->cpuTimeLabel->setText(QString::number(time, 'f', 2) + " ms");
+    if (cpuDone && gpuDone) {
+        liveTimer->stop();
+        spinnerTimer->stop();
+        ui->backButton->setEnabled(true);
+    }
+}
 
-    ui->cpuImageLabel->setPixmap(QPixmap::fromImage(cpuImage).scaled(ui->cpuImageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->gpuImageLabel->setPixmap(QPixmap::fromImage(gpuImage).scaled(ui->gpuImageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->cpuTimeLabel->setText(QString::number(cpuTime, 'f', 2) + " ms");
-    ui->gpuTimeLabel->setText(QString::number(gpuTime, 'f', 2) + " ms");
-    ui->backButton->setEnabled(true);
+void ResultScreen::showGpuResult(const QImage& image, double time) {
+    gpuDone = true;
+    ui->gpuImageLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->gpuImageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->gpuTimeLabel->setText(QString::number(time, 'f', 2) + " ms");
+    if (cpuDone && gpuDone) {
+        liveTimer->stop();
+        spinnerTimer->stop();
+        ui->backButton->setEnabled(true);
+    }
 }
 
 void ResultScreen::cleanScreen() {
@@ -50,16 +61,21 @@ void ResultScreen::cleanScreen() {
 
 void ResultScreen::updateLiveTimer() {
     QString timeStr = QString::number(elapsedTimer.elapsed()) + ".00 ms";
-    ui->cpuTimeLabel->setText(timeStr);
-    ui->gpuTimeLabel->setText(timeStr);
+    if (!cpuDone) 
+        ui->cpuTimeLabel->setText(timeStr);
+    if (!gpuDone) 
+        ui->gpuTimeLabel->setText(timeStr);
 }
 
 void ResultScreen::updateSpinner() {
-    auto drawSpinner = [this](QLabel* label) {
+    auto drawSpinner = [this](QLabel* label, bool isDone) {
+        if (isDone) 
+            return;
         QPixmap pix(label->size());
         pix.fill(Qt::transparent);
         QPainter p(&pix);
         p.setRenderHint(QPainter::Antialiasing);
+        
         int size = qMin(pix.width(), pix.height()) / 4;
         QRect rect((pix.width() - size) / 2, (pix.height() - size) / 2, size, size);
         QPen pen(QColor("#1E1E1E"), 8);
@@ -67,9 +83,8 @@ void ResultScreen::updateSpinner() {
         p.drawArc(rect, spinnerAngle * 16, 120 * 16);
         label->setPixmap(pix);
         };
-
-    drawSpinner(ui->cpuImageLabel);
-    drawSpinner(ui->gpuImageLabel);
+    drawSpinner(ui->cpuImageLabel, cpuDone);
+    drawSpinner(ui->gpuImageLabel, gpuDone);
     spinnerAngle = (spinnerAngle + 10) % 360;
 }
 

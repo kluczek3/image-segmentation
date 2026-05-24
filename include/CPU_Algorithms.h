@@ -8,7 +8,7 @@ public:
 
 class KMeansCPU : public SegmentationAlgorithm {
 public:
-    KMeansCPU(int clusters = 3, int maxIter = 100);
+    KMeansCPU(int clusters, int maxIter);
     std::pair<cv::Mat, double> execute(const cv::Mat& inputImage) override;
 private:
     int k;
@@ -17,7 +17,7 @@ private:
 
 class FCMCPU : public SegmentationAlgorithm {
 public:
-    FCMCPU(int clusters = 3, int maxIter = 100, float fuzziness = 2.0f, float epsilon = 0.01f);
+    FCMCPU(int clusters, int maxIter, float fuzziness, float epsilon);
     std::pair<cv::Mat, double> execute(const cv::Mat& inputImage) override;
 private:
     int k;
@@ -28,7 +28,7 @@ private:
 
 class MeanShiftCPU : public SegmentationAlgorithm {
 public:
-    MeanShiftCPU(float spatialBandwidth = 8.0f, float colorBandwidth = 16.0f, int maxIter = 10);
+    MeanShiftCPU(float spatialBandwidth, float colorBandwidth, int maxIter);
     std::pair<cv::Mat, double> execute(const cv::Mat& inputImage) override;
 private:
     float hs;

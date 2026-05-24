@@ -1,6 +1,6 @@
+#include "GPU_Algorithms.h"
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
-#include "GPU_Algorithms.h"
 #include <vector>
 
 __global__ void histoKernel(const uchar* img, int size, int* histo) {

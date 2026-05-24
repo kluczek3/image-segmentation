@@ -11,7 +11,8 @@ public:
     explicit ResultScreen(QWidget* parent = nullptr);
     ~ResultScreen();
     void prepareProcessing(const QString& algoName);
-    void showResults(const QImage& cpuImage, double cpuTime, const QImage& gpuImage, double gpuTime);
+    void showCpuResult(const QImage& image, double time);
+    void showGpuResult(const QImage& image, double time);
     void cleanScreen();
 
 signals:
@@ -28,4 +29,6 @@ private:
     QTimer* spinnerTimer;
     QElapsedTimer elapsedTimer;
     int spinnerAngle;
+    bool cpuDone;
+    bool gpuDone;
 };

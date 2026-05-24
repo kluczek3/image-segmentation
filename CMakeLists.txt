@@ -3,6 +3,8 @@ project(ImageSegmentationCUDA LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_ARCHITECTURES "all")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -11,11 +13,12 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets Concurrent REQUIRED)
-find_package(OpenCV REQUIRED)
+
+find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs)
 
 include_directories(include)
 
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME} WIN32
     src/main.cpp
     src/StartScreen.cpp
     src/ResultScreen.cpp
@@ -24,7 +27,6 @@ add_executable(${PROJECT_NAME}
     src/GPU_Algorithms.cu
     include/StartScreen.h
     include/ResultScreen.h
-    include/ReplayData.h
     include/SegmentationAlgorithm.h
     include/ImageConverter.h
     include/CoreManager.h
@@ -37,7 +39,9 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     Qt6::Widgets 
     Qt6::Concurrent 
-    ${OpenCV_LIBS}
+    opencv_core
+    opencv_imgproc
+    opencv_imgcodecs
 )
 
 add_definitions(-DPROJECT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
