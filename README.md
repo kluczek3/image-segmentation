@@ -49,7 +49,7 @@ The project uses `vcpkg` as a Git submodule for dependency management.
 Clone the repository recursively:
 
 ```bash
-git clone --recursive https://github.com/yourusername/CUDASegmentation.git
+git clone --recursive https://github.com/kluczek3/CUDASegmentation.git
 cd CUDASegmentation
 ```
 
