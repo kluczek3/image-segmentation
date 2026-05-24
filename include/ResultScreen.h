@@ -11,7 +11,7 @@ public:
     explicit ResultScreen(QWidget* parent = nullptr);
     ~ResultScreen();
     void prepareProcessing(const QString& algoName);
-    void showResults(const QImage& resultImage, double executionTime);
+    void showResults(const QImage& cpuImage, double cpuTime, const QImage& gpuImage, double gpuTime);
     void cleanScreen();
 
 signals:

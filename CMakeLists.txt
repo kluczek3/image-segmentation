@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.18)
-project(ImageSegmentationCUDA LANGUAGES CXX)
+project(ImageSegmentationCUDA LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,6 +21,7 @@ add_executable(${PROJECT_NAME}
     src/ResultScreen.cpp
     src/CoreManager.cpp
     src/CPU_Algorithms.cpp
+    src/GPU_Algorithms.cu
     include/StartScreen.h
     include/ResultScreen.h
     include/ReplayData.h
@@ -28,6 +29,7 @@ add_executable(${PROJECT_NAME}
     include/ImageConverter.h
     include/CoreManager.h
     include/CPU_Algorithms.h
+    include/GPU_Algorithms.h
     ui/StartScreen.ui
     ui/ResultScreen.ui
 )

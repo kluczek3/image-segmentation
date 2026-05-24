@@ -53,25 +53,16 @@ int main(int argc, char* argv[]) {
 
     QObject::connect(startScreen, &StartScreen::segmentRequested, [&](int algoIndex, const QString& algoName) {
         if (inputImage.isNull()) return;
-
         mainWindow.setCurrentIndex(1);
-        AlgorithmType type;
-        switch (algoIndex) {
-        case 0: type = AlgorithmType::KMeans_CPU; break;
-        case 1: type = AlgorithmType::FCM_CPU; break;
-        case 2: type = AlgorithmType::Otsu_CPU; break;
-        case 3: type = AlgorithmType::MeanShift_CPU; break;
-        default: type = AlgorithmType::KMeans_CPU; break;
-        }
-        coreManager->startProcessing(inputImage, type);
+        coreManager->startProcessing(inputImage, algoIndex);
         });
 
     QObject::connect(coreManager, &CoreManager::processingStarted, [&]() {
         resultScreen->prepareProcessing(startScreen->findChild<QLabel*>("currentAlgoLabel")->text());
         });
 
-    QObject::connect(coreManager, &CoreManager::processingFinished, [&](const QImage& resultImage, double executionTime) {
-        resultScreen->showResults(resultImage, executionTime);
+    QObject::connect(coreManager, &CoreManager::processingFinished, [&](const QImage& cpuImage, double cpuTime, const QImage& gpuImage, double gpuTime) {
+        resultScreen->showResults(cpuImage, cpuTime, gpuImage, gpuTime);
         });
 
     QObject::connect(resultScreen, &ResultScreen::backRequested, [&]() {
