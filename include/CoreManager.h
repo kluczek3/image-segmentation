@@ -1,7 +1,7 @@
 #pragma once
 #include <QObject>
 #include <QImage>
-#include <QFutureWatcher>
+#include <atomic>
 #include <memory>
 #include <opencv2/opencv.hpp>
 #include "SegmentationAlgorithm.h"
@@ -24,6 +24,5 @@ private:
     std::unique_ptr<SegmentationAlgorithm> createAlgorithmCPU(int type, const AlgoParameters& params);
     std::unique_ptr<SegmentationAlgorithm> createAlgorithmGPU(int type, const AlgoParameters& params);
 
-    QFutureWatcher<std::pair<cv::Mat, double>> cpuWatcher;
-    QFutureWatcher<std::pair<cv::Mat, double>> gpuWatcher;
+    std::atomic<quint64> activeRequestId;
 };
